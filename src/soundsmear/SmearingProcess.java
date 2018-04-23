@@ -5,19 +5,10 @@
  */
 package soundsmear;
 
-
 /**
  *
  * @author ymerejsasnak
  */
-public class SoundSmear {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-       AudioManager am = new AudioManager();
-       am.loadSample();
-    }
+public class SmearingProcess {
     
 }
