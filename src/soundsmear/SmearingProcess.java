@@ -37,7 +37,7 @@ public class SmearingProcess {
             }
         }
         
-        Sample output = new Sample(inFrameData[0].length);
+        Sample output = new Sample(inFrameData[0].length / 44.1);
         
         output.putFrames(0, outFrameData);
         

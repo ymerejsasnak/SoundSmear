@@ -101,10 +101,12 @@ public class AudioManager {
     public void processInput()
     {
         outputSample = SmearingProcess.processFrames(this);
+        System.out.println(outputSample.getLength());
         outputPlayer = new SamplePlayer(ac, outputSample);
         outputPlayer.pause(true);
-        outputPlayer.setLoopStart(new Static(ac, 01));
-        outputPlayer.setLoopEnd(new Static(ac, (float) outputSample.getLength()));
+        outputPlayer.getLoopStartUGen().setValue(0);
+        outputPlayer.getLoopEndUGen().setValue((float) outputSample.getLength());
+        //1outputPlayer.setLoopEnd(new Static(ac, (float) outputSample.getLength()));
         outputPlayer.setKillOnEnd(false);
         ac.out.addInput(outputPlayer);
     }

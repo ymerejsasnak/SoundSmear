@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ 
+TO DO:
+
+-cleanup/refactor existing code - make it clean and clear and tight
+-also need lots of error checking/handling
+-add options for output file length, # of paste iterations
+-options for variation to start and end (ie paste partial output)
+-add ability to load multiple input files to randomly draw from, store multiple output files before saving
+-add ability to save files of course
+-fix handling of stereo vs mono sounds
+-options for panning and pitch variation per-paste
+-ways to slowly change many above settings for morphing sound (maybe do it 'palindromically' to retain loopability)
+
+-super simple gui eventually?
+
+
  */
 package soundsmear;
 
