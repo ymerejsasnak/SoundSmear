@@ -34,8 +34,11 @@ public class SoundSmear {
 
             System.out.println("\n" +
                     "1. Load input file\n" +
-                    "2. Play input file\n" +
-                    "3. \n" +
+                    "2. Play original sound\n" +
+                    "3. Process sound\n" +
+                    "4. Play processed sound\n" +
+                    "5. Loop processed sound\n" +
+                    "6. Stop all sounds\n" +
                     "7 exit"
 
                     );
@@ -50,7 +53,18 @@ public class SoundSmear {
                 case 2:
                     am.playInput();
                     break;
-                    
+                case 3:
+                    am.processInput();
+                    break;
+                case 4:
+                    am.playOutput();
+                    break;
+                case 5:
+                    am.loopOutput();
+                    break;
+                case 6:
+                    am.stopSounds();
+                    break;
                     
                 case 7:
                     break;
