@@ -18,14 +18,17 @@ import java.io.*;
 public class AudioManager {
 
     private final AudioContext ac;
-    private Sample sample;
-    private SamplePlayer player;
+    private Sample inputSample;
+    private SamplePlayer inputPlayer;
+    
     
     public AudioManager()
     {
         ac = new AudioContext();
+        ac.start();
         
     }
+    
     
     public void loadSample()
     {
@@ -35,7 +38,12 @@ public class AudioManager {
             File sampleFile = fc.getSelectedFile();
             try
             {
-                sample = new Sample(sampleFile.getAbsolutePath());
+                inputSample = new Sample(sampleFile.getAbsolutePath());
+                inputPlayer = new SamplePlayer(ac, inputSample);
+                inputPlayer.pause(true);
+                inputPlayer.setKillOnEnd(false);
+                ac.out.addInput(inputPlayer);
+                
                 System.out.println(sampleFile.getName() + " loaded.");
             }
             catch (IOException e)
@@ -50,5 +58,14 @@ public class AudioManager {
         }
         
         
+    }
+    
+    
+    public void playInput()
+    {
+        
+        inputPlayer.reTrigger();
+        
+        //inputPlayer.
     }
 }
