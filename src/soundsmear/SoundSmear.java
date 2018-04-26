@@ -4,6 +4,7 @@ TO DO:
 
 -cleanup/refactor existing code - make it clean and clear and tight
 -also need lots of error checking/handling
+
 -add options for output file length, # of paste iterations (figure way to scale volume properly)
 -options to set start and end, and add variation (ie paste partial output)
 -add ability to load multiple input files to randomly draw from, store multiple output files before saving
@@ -54,7 +55,7 @@ public class SoundSmear {
                     "4. Play processed sound\n" +
                     "5. Loop processed sound\n" +
                     "6. Stop all sounds\n" +
-                    "7 exit"
+                    "0 exit"
 
                     );
             
@@ -69,7 +70,11 @@ public class SoundSmear {
                     am.playInput();
                     break;
                 case 3:
-                    am.processInput();
+                    System.out.println("Length in ms?");
+                    int len = s.nextInt();
+                    System.out.println("Number of iterations?");
+                    int iters = s.nextInt();
+                    am.processInput(len, iters);
                     break;
                 case 4:
                     am.playOutput();
@@ -86,7 +91,7 @@ public class SoundSmear {
                     
             }
             
-        } while (choice != 7);
+        } while (choice != 0);
     }
     
 }

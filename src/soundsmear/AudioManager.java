@@ -62,20 +62,26 @@ public class AudioManager {
     
     
     public void playInput()
-    {
+    {        
+        if (inputPlayer == null) { return; }
+        
         inputPlayer.reTrigger();
     }
     
     
     public void playOutput()
     {
+        if (outputPlayer == null) { return; }
+        
         outputPlayer.setLoopType(SamplePlayer.LoopType.NO_LOOP_FORWARDS);
         outputPlayer.reTrigger();
     }
     
     
     public void loopOutput()
-    {
+    {        
+        if (outputPlayer == null) { return; }
+        
         outputPlayer.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
         outputPlayer.reTrigger();
     }
@@ -83,8 +89,8 @@ public class AudioManager {
     
     public void stopSounds()
     {
-        inputPlayer.pause(true);
-        outputPlayer.pause(true);
+        if (inputPlayer != null) {  inputPlayer.pause(true);  }
+        if (outputPlayer != null) {  outputPlayer.pause(true);  }
     }
     
     
@@ -94,9 +100,11 @@ public class AudioManager {
     }
     
     
-    public void processInput()
+    public void processInput(int len, int iters)
     {
-        outputSample = SmearingProcess.processFrames(this);
+        outputSample = SmearingProcess.processFrames(this, len, iters);
+        
+        if (outputPlayer != null) {  outputPlayer.pause(true);  }
         
         outputPlayer = setupPlayer(new SamplePlayer(ac, outputSample));
     }

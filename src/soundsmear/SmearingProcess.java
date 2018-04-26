@@ -16,28 +16,34 @@ public class SmearingProcess {
     
 
     
-    public static Sample processFrames(AudioManager am)
+    public static Sample processFrames(AudioManager am, int lengthMS, int iterations)
     {
-        
+            
+        // declare array and load frame data from audiomanager's input sample
         float[][] inFrameData = new float[2][(int) am.getInputSample().getNumFrames()];
         am.getInputSample().getFrames(0, inFrameData);
         
-        float[][] outFrameData = new float[2][inFrameData[0].length];
+        
+        // setup output frame array
+        float[][] outFrameData = new float[2][(int)(lengthMS * 44.1)];
+        
+        Sample output = new Sample(lengthMS);
+        
         
         Random r = new Random();
         
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < iterations; i++)
         {
-            int offset = r.nextInt(inFrameData[0].length - 1);
+            int offset = r.nextInt(outFrameData[0].length - 1);
             
             for (int frame = 0; frame < inFrameData[0].length; frame++)
             {
-                outFrameData[0][(frame + offset) % inFrameData[0].length] += inFrameData[0][frame] * 0.1f;
-                outFrameData[1][(frame + offset) % inFrameData[0].length] += inFrameData[0][frame] * 0.1f;
+                outFrameData[0][(frame + offset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
+                outFrameData[1][(frame + offset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
             }
         }
         
-        Sample output = new Sample(inFrameData[0].length / 44.1);
+        
         
         output.putFrames(0, outFrameData);
         
