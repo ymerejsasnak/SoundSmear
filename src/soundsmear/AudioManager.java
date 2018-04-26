@@ -11,7 +11,7 @@ import net.beadsproject.beads.ugens.SamplePlayer;
 
 import javax.swing.JFileChooser;
 import java.io.*;
-import net.beadsproject.beads.ugens.Static;
+
 /**
  *
  * @author ymerejsasnak
@@ -43,10 +43,8 @@ public class AudioManager {
             try
             {
                 inputSample = new Sample(sampleFile.getAbsolutePath());
-                inputPlayer = new SamplePlayer(ac, inputSample);
-                inputPlayer.pause(true);
-                inputPlayer.setKillOnEnd(false);
-                ac.out.addInput(inputPlayer);
+                
+                inputPlayer = setupPlayer(new SamplePlayer(ac, inputSample));
                 
                 System.out.println(sampleFile.getName() + " loaded.");
             }
@@ -59,18 +57,13 @@ public class AudioManager {
         else 
         {
             System.out.println("User cancelled selection. No file loaded.");
-        }
-        
-        
+        }  
     }
     
     
     public void playInput()
     {
-        
         inputPlayer.reTrigger();
-        
-        //inputPlayer.
     }
     
     
@@ -80,17 +73,20 @@ public class AudioManager {
         outputPlayer.reTrigger();
     }
     
+    
     public void loopOutput()
     {
         outputPlayer.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
         outputPlayer.reTrigger();
     }
     
+    
     public void stopSounds()
     {
         inputPlayer.pause(true);
         outputPlayer.pause(true);
     }
+    
     
     public Sample getInputSample()
     {
@@ -101,13 +97,17 @@ public class AudioManager {
     public void processInput()
     {
         outputSample = SmearingProcess.processFrames(this);
-        System.out.println(outputSample.getLength());
-        outputPlayer = new SamplePlayer(ac, outputSample);
-        outputPlayer.pause(true);
-        outputPlayer.getLoopStartUGen().setValue(0);
-        outputPlayer.getLoopEndUGen().setValue((float) outputSample.getLength());
-        //1outputPlayer.setLoopEnd(new Static(ac, (float) outputSample.getLength()));
-        outputPlayer.setKillOnEnd(false);
-        ac.out.addInput(outputPlayer);
+        
+        outputPlayer = setupPlayer(new SamplePlayer(ac, outputSample));
+    }
+    
+    
+    private SamplePlayer setupPlayer(SamplePlayer sp)
+    {
+        sp.pause(true);
+        sp.setKillOnEnd(false);
+        ac.out.addInput(sp);
+        
+        return sp;
     }
 }

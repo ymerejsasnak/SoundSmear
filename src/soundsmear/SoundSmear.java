@@ -4,12 +4,14 @@ TO DO:
 
 -cleanup/refactor existing code - make it clean and clear and tight
 -also need lots of error checking/handling
--add options for output file length, # of paste iterations
--options for variation to start and end (ie paste partial output)
+-add options for output file length, # of paste iterations (figure way to scale volume properly)
+-options to set start and end, and add variation (ie paste partial output)
 -add ability to load multiple input files to randomly draw from, store multiple output files before saving
--add ability to save files of course
+-add ability to save files of course (single or all)
 -fix handling of stereo vs mono sounds
 -options for panning and pitch variation per-paste
+-helpful text display of it all
+-maybe command based input (ie 'play [filename]' 'process [filename]' etc)
 -ways to slowly change many above settings for morphing sound (maybe do it 'palindromically' to retain loopability)
 
 -super simple gui eventually?
@@ -39,7 +41,7 @@ public class SoundSmear {
     
     public static void runMenu(AudioManager am)
     {
-        int choice = 0;
+        int choice;
         Scanner s = new Scanner(System.in);
         
         do {
