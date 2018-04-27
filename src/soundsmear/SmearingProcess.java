@@ -34,7 +34,7 @@ public class SmearingProcess {
         
         for (int i = 0; i < iterations; i++)
         {
-            int offset = r.nextInt(outFrameData[0].length - 1);
+            int offset = r.nextInt(outFrameData[0].length);
             
             for (int frame = 0; frame < inFrameData[0].length; frame++)
             {
