@@ -100,9 +100,9 @@ public class AudioManager {
     }
     
     
-    public void processInput(int len, int iters)
+    public void processInput()
     {
-        outputSample = SmearingProcess.processFrames(this, len, iters);
+        outputSample = SmearingProcess.processFrames(this);
         
         if (outputPlayer != null) {  outputPlayer.pause(true);  }
         

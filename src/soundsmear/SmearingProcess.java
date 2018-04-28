@@ -13,10 +13,21 @@ import net.beadsproject.beads.data.Sample;
  */
 public class SmearingProcess {
     
-    
+    public static int lengthMS = 1000;
+    public static int iterations = 10;
 
     
-    public static Sample processFrames(AudioManager am, int lengthMS, int iterations)
+    public static void setOutputLength(int l)
+    {
+        lengthMS = l;
+    }
+    
+    public static void setIterations(int i)
+    {
+        iterations = i;
+    }
+    
+    public static Sample processFrames(AudioManager am)
     {
             
         // declare array and load frame data from audiomanager's input sample
