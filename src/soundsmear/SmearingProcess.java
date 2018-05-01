@@ -36,9 +36,11 @@ public class SmearingProcess {
     public static Sample processFrames(AudioManager am)
     {
             
-        // declare array and load frame data from audiomanager's input sample
-        float[][] inFrameData = new float[2][(int) am.getInputSample().getNumFrames()];
-        am.getInputSample().getFrames(0, inFrameData);
+        // declare array and load frame data from audiomanager's input samples
+        float[][] inFrameData0 = new float[2][(int) am.getInputSample(0).getNumFrames()];
+        am.getInputSample(0).getFrames(0, inFrameData0);
+        float[][] inFrameData1 = new float[2][(int) am.getInputSample(1).getNumFrames()];
+        am.getInputSample(1).getFrames(0, inFrameData1);
         
         
         // setup output frame array
@@ -60,10 +62,21 @@ public class SmearingProcess {
                 Roffset = r.nextInt(outFrameData[0].length);
             
             
-            for (int frame = 0; frame < inFrameData[0].length; frame++)
+            if (r.nextBoolean())
             {
-                outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
-                outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData[1][frame] * 0.2f;
+                for (int frame = 0; frame < inFrameData0[0].length; frame++)
+                {
+                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData0[0][frame] * 0.2f;
+                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData0[1][frame] * 0.2f;
+                }
+            } 
+            else
+            {
+                for (int frame = 0; frame < inFrameData1[0].length; frame++)
+                {
+                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData1[0][frame] * 0.2f;
+                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData1[1][frame] * 0.2f;
+                }
             }
         }
         

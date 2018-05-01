@@ -19,8 +19,8 @@ import java.io.*;
 public class AudioManager {
 
     private final AudioContext ac;
-    private Sample inputSample;
-    private SamplePlayer inputPlayer;
+    private Sample[] inputSample = new Sample[2];
+    private SamplePlayer[] inputPlayer = new SamplePlayer[2];
     
     private Sample outputSample;
     private SamplePlayer outputPlayer;
@@ -34,7 +34,7 @@ public class AudioManager {
     }
     
     
-    public String loadSample()
+    public String loadSample(int index)
     {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
@@ -42,9 +42,9 @@ public class AudioManager {
             File sampleFile = fc.getSelectedFile();
             try
             {
-                inputSample = new Sample(sampleFile.getAbsolutePath());
+                inputSample[index] = new Sample(sampleFile.getAbsolutePath());
                 
-                inputPlayer = setupPlayer(new SamplePlayer(ac, inputSample));
+                inputPlayer[index] = setupPlayer(new SamplePlayer(ac, inputSample[index]));
                 
                 System.out.println(sampleFile.getName() + " loaded.");
                 
@@ -65,11 +65,11 @@ public class AudioManager {
     }
     
     
-    public void playInput()
+    public void playInput(int index)
     {        
-        if (inputPlayer == null) { return; }
+        if (inputPlayer[index] == null) { return; }
         
-        inputPlayer.reTrigger();
+        inputPlayer[index].reTrigger();
     }
     
     
@@ -93,14 +93,15 @@ public class AudioManager {
     
     public void stopSounds()
     {
-        if (inputPlayer != null) {  inputPlayer.pause(true);  }
+        if (inputPlayer[0] != null) {  inputPlayer[0].pause(true);  }
+        if (inputPlayer[1] != null) {  inputPlayer[1].pause(true);  }
         if (outputPlayer != null) {  outputPlayer.pause(true);  }
     }
     
     
-    public Sample getInputSample()
+    public Sample getInputSample(int index)
     {
-        return inputSample;
+        return inputSample[index];
     }
     
     
