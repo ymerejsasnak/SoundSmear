@@ -34,7 +34,7 @@ public class AudioManager {
     }
     
     
-    public void loadSample()
+    public String loadSample()
     {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
@@ -47,16 +47,20 @@ public class AudioManager {
                 inputPlayer = setupPlayer(new SamplePlayer(ac, inputSample));
                 
                 System.out.println(sampleFile.getName() + " loaded.");
+                
+                return sampleFile.getName();
             }
             catch (IOException e)
             {
                 System.out.println(e);
                 System.out.println("Unable to load " + sampleFile.getName());
+                return "";
             }
         }
         else 
         {
             System.out.println("User cancelled selection. No file loaded.");
+            return "";
         }  
     }
     

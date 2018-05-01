@@ -15,6 +15,7 @@ public class SmearingProcess {
     
     public static int lengthMS = 1000;
     public static int iterations = 10;
+    public static boolean stereo = false;
 
     
     public static void setOutputLength(int l)
@@ -25,6 +26,11 @@ public class SmearingProcess {
     public static void setIterations(int i)
     {
         iterations = i;
+    }
+    
+    public static void setStereo(boolean s)
+    {
+        stereo = s;
     }
     
     public static Sample processFrames(AudioManager am)
@@ -45,12 +51,19 @@ public class SmearingProcess {
         
         for (int i = 0; i < iterations; i++)
         {
-            int offset = r.nextInt(outFrameData[0].length);
+            
+            int Loffset = r.nextInt(outFrameData[0].length);
+            int Roffset = Loffset;
+            
+            // if set to, use separate offsets for left and right
+            if (stereo)
+                Roffset = r.nextInt(outFrameData[0].length);
+            
             
             for (int frame = 0; frame < inFrameData[0].length; frame++)
             {
-                outFrameData[0][(frame + offset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
-                outFrameData[1][(frame + offset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
+                outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData[0][frame] * 0.2f;
+                outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData[1][frame] * 0.2f;
             }
         }
         
