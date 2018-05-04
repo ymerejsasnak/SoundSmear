@@ -51,6 +51,8 @@ public class SmearingProcess {
         
         Random r = new Random();
         
+                
+                
         for (int i = 0; i < iterations; i++)
         {
             
@@ -66,18 +68,34 @@ public class SmearingProcess {
             {
                 for (int frame = 0; frame < inFrameData0[0].length; frame++)
                 {
-                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData0[0][frame] * 0.2f;
-                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData0[1][frame] * 0.2f;
+                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData0[0][frame];
+                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData0[1][frame];
                 }
             } 
             else
             {
                 for (int frame = 0; frame < inFrameData1[0].length; frame++)
                 {
-                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData1[0][frame] * 0.2f;
-                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData1[1][frame] * 0.2f;
+                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData1[0][frame];
+                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData1[1][frame];
                 }
             }
+        }
+        
+        //normalize output
+        
+        float maxValue = 0;
+        for (int i = 0; i < outFrameData[0].length; i++)
+        {
+            // get max value
+            maxValue = Math.max(maxValue, outFrameData[0][i]);
+            maxValue = Math.max(maxValue, outFrameData[1][i]);
+        }
+        
+        for (int i = 0; i < outFrameData[0].length; i++)
+        {
+            outFrameData[0][i] = outFrameData[0][i] / maxValue;
+            outFrameData[1][i] = outFrameData[1][i] / maxValue;
         }
         
         
