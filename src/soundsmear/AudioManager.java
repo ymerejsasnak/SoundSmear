@@ -31,6 +31,19 @@ public class AudioManager {
         ac = new AudioContext();
         ac.start();
         
+        System.out.println(System.getProperty("user.dir"));
+        
+        try
+        {
+            inputSample[0] = new Sample("default.wav");
+            inputSample[1] = new Sample("default.wav");
+            inputPlayer[0] = setupPlayer(new SamplePlayer(ac, inputSample[0]));
+            inputPlayer[1] = setupPlayer(new SamplePlayer(ac, inputSample[1]));
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error loading default wavs.");    
+        }
     }
     
     
