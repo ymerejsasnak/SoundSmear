@@ -15,7 +15,7 @@ public class SmearingProcess {
     
     public static int lengthMS = 1000;
     public static int iterations = 10;
-    public static boolean stereo = false;
+    public static boolean randomPan = false;
 
     
     public static void setOutputLength(int l)
@@ -30,7 +30,7 @@ public class SmearingProcess {
     
     public static void setStereo(boolean s)
     {
-        stereo = s;
+        randomPan = s;
     }
     
     public static Sample processFrames(AudioManager am)
@@ -55,29 +55,39 @@ public class SmearingProcess {
                 
         for (int i = 0; i < iterations; i++)
         {
+            float leftGain = .5f;
+            float rightGain = .5f;
             
-            int Loffset = r.nextInt(outFrameData[0].length);
-            int Roffset = Loffset;
+            int offset = r.nextInt(outFrameData[0].length);
+                        
             
-            // if set to, use separate offsets for left and right
-            if (stereo)
-                Roffset = r.nextInt(outFrameData[0].length);
+            if (randomPan)
+            {
+                // linear panning ok?
+                leftGain = r.nextFloat();
+                rightGain = 1 - leftGain;
+            }
             
+            //temporary stuff, clean it up!
+            float rate = .5f;
+            int writeFrame = 0;
             
             if (r.nextBoolean())
             {
-                for (int frame = 0; frame < inFrameData0[0].length; frame++)
+                for (float frame = 0; frame < inFrameData0[0].length; frame+= rate)
                 {
-                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData0[0][frame];
-                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData0[1][frame];
+                    outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[0][(int)frame] * leftGain;
+                    outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[1][(int)frame] * rightGain;
+                    writeFrame++;
                 }
             } 
             else
             {
-                for (int frame = 0; frame < inFrameData1[0].length; frame++)
+                for (float frame = 0; frame < inFrameData1[0].length; frame+= rate)
                 {
-                    outFrameData[0][(frame + Loffset) % outFrameData[0].length] += inFrameData1[0][frame];
-                    outFrameData[1][(frame + Roffset) % outFrameData[0].length] += inFrameData1[1][frame];
+                    outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[0][(int)frame] * leftGain;
+                    outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[1][(int)frame] * rightGain;
+                    writeFrame++;
                 }
             }
         }
