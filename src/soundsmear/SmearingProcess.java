@@ -16,7 +16,8 @@ public class SmearingProcess {
     public static int lengthMS = 1000;
     public static int iterations = 10;
     public static boolean randomPan = false;
-
+    public static float pitchRange0 = 1;
+    public static float pitchRange1 = 1;
     
     public static void setOutputLength(int l)
     {
@@ -31,6 +32,16 @@ public class SmearingProcess {
     public static void setStereo(boolean s)
     {
         randomPan = s;
+    }
+    
+    public static void setPitchRange0(float range)
+    {
+        pitchRange0 = range;
+    }
+    
+    public static void setPitchRange1(float range)
+    {
+        pitchRange1 = range;
     }
     
     public static Sample processFrames(AudioManager am)
@@ -69,12 +80,14 @@ public class SmearingProcess {
             }
             
             //temporary stuff, clean it up!
-            float rate = .5f;
+            float lRate =  r.nextFloat() * (pitchRange0/1 - 1/pitchRange0) + 1/pitchRange0;
+            float rRate =  r.nextFloat() * (pitchRange1/1 - 1/pitchRange1) + 1/pitchRange1;
+            
             int writeFrame = 0;
             
             if (r.nextBoolean())
             {
-                for (float frame = 0; frame < inFrameData0[0].length; frame+= rate)
+                for (float frame = 0; frame < inFrameData0[0].length; frame+= lRate)
                 {
                     outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[0][(int)frame] * leftGain;
                     outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[1][(int)frame] * rightGain;
@@ -83,7 +96,7 @@ public class SmearingProcess {
             } 
             else
             {
-                for (float frame = 0; frame < inFrameData1[0].length; frame+= rate)
+                for (float frame = 0; frame < inFrameData1[0].length; frame+= rRate)
                 {
                     outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[0][(int)frame] * leftGain;
                     outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[1][(int)frame] * rightGain;
