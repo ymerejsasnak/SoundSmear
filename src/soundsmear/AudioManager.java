@@ -25,13 +25,14 @@ public class AudioManager {
     private Sample outputSample;
     private SamplePlayer outputPlayer;
     
+    JFileChooser fc;
     
     public AudioManager()
     {
         ac = new AudioContext();
         ac.start();
         
-        System.out.println(System.getProperty("user.dir"));
+        fc = new JFileChooser();
         
         try
         {
@@ -49,7 +50,6 @@ public class AudioManager {
     
     public String loadSample(int index)
     {
-        JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             File sampleFile = fc.getSelectedFile();

@@ -7,11 +7,8 @@ TO DO:
 -!! doesn't work correctly if input files aren't 44.1khz, etc
 
 
+-interpolation for frame values for better sound when changing pitch?
 
--add per-input settings for:
- -panning variation (0 - 100%)
- -base pitch
- -pitch variation
 
 -need to clean up audiomanager and smearprocess!
 
