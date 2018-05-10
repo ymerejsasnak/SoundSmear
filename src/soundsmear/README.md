@@ -13,8 +13,5 @@ TO DO:
 -need to clean up audiomanager and smearprocess!
 
 
--add button to save output
-
-
 
 -eventually remove beads and do wav reading/writing/playing myself?

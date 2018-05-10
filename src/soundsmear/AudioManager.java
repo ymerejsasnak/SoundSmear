@@ -77,6 +77,22 @@ public class AudioManager {
         }  
     }
     
+    public void saveSample()
+    {
+        int output = fc.showSaveDialog(null);
+        if (output == JFileChooser.APPROVE_OPTION && outputSample != null)
+        {
+            try
+            {
+                outputSample.write(fc.getSelectedFile().getAbsolutePath());
+            }
+            catch (IOException e)
+            {
+                System.out.println("Failed to save file.");
+            }
+        }
+        
+    }
     
     public void playInput(int index)
     {        
