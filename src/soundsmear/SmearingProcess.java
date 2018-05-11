@@ -13,11 +13,11 @@ import net.beadsproject.beads.data.Sample;
  */
 public class SmearingProcess {
     
-    public static int lengthMS = 1000;
-    public static int iterations = 10;
-    public static boolean randomPan = false;
-    public static float pitchRange0 = 1;
-    public static float pitchRange1 = 1;
+    private static int lengthMS = 1000;
+    private static int iterations = 10;
+    private static boolean randomPan = false;
+    private static float pitchRange0 = 1;
+    private static float pitchRange1 = 1;
     
     public static void setOutputLength(int l)
     {
@@ -48,87 +48,94 @@ public class SmearingProcess {
     {
             
         // declare array and load frame data from audiomanager's input samples
-        float[][] inFrameData0 = new float[2][(int) am.getInputSample(0).getNumFrames()];
-        am.getInputSample(0).getFrames(0, inFrameData0);
-        float[][] inFrameData1 = new float[2][(int) am.getInputSample(1).getNumFrames()];
-        am.getInputSample(1).getFrames(0, inFrameData1);
-        
+        float[][] inFrameDataA = new float[2][(int) am.getInputSample(0).getNumFrames()];
+        am.getInputSample(0).getFrames(0, inFrameDataA);
+        float[][] inFrameDataB = new float[2][(int) am.getInputSample(1).getNumFrames()];
+        am.getInputSample(1).getFrames(0, inFrameDataB);
         
         // setup output frame array
         float[][] outFrameData = new float[2][(int)(lengthMS * 44.1)];
-        
-        Sample output = new Sample(lengthMS);
-        
-        
+               
         Random r = new Random();
         
                 
                 
         for (int i = 0; i < iterations; i++)
         {
-            float leftGain = .5f;
-            float rightGain = .5f;
             
-            int offset = r.nextInt(outFrameData[0].length);
-                        
+            
+            float leftGain, rightGain;
             
             if (randomPan)
             {
-                // linear panning ok?
                 leftGain = r.nextFloat();
                 rightGain = 1 - leftGain;
             }
+            else 
+            {
+                leftGain = rightGain = .5f;
+            }
             
-            //temporary stuff, clean it up!
-            float lRate =  r.nextFloat() * (pitchRange0/1 - 1/pitchRange0) + 1/pitchRange0;
-            float rRate =  r.nextFloat() * (pitchRange1/1 - 1/pitchRange1) + 1/pitchRange1;
+              
             
-            int writeFrame = 0;
             
+            float rate;
+            float[][] inData;
+            
+            // choose sample A or B and set rate according to settings
             if (r.nextBoolean())
             {
-                for (float frame = 0; frame < inFrameData0[0].length; frame+= lRate)
-                {
-                    outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[0][(int)frame] * leftGain;
-                    outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData0[1][(int)frame] * rightGain;
-                    writeFrame++;
-                }
-            } 
+                inData = inFrameDataA;
+                rate = r.nextFloat() * (pitchRange0/1 - 1/pitchRange0) + 1/pitchRange0;
+            }
             else
             {
-                for (float frame = 0; frame < inFrameData1[0].length; frame+= rRate)
-                {
-                    outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[0][(int)frame] * leftGain;
-                    outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inFrameData1[1][(int)frame] * rightGain;
-                    writeFrame++;
-                }
+                inData = inFrameDataB;
+                rate = r.nextFloat() * (pitchRange1/1 - 1/pitchRange1) + 1/pitchRange1;
+            }
+            
+            
+            
+            // position to start working from
+            int offset = r.nextInt(outFrameData[0].length);
+           
+            int writeFrame = 0;
+            
+            for (float frame = 0; frame < inData[0].length; frame += rate)
+            {                   
+                outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inData[0][(int)frame] * leftGain;
+                outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inData[1][(int)frame] * rightGain;
+                writeFrame++;
             }
         }
         
-        //normalize output
         
-        float maxValue = 0;
-        for (int i = 0; i < outFrameData[0].length; i++)
-        {
-            // get max value
-            maxValue = Math.max(maxValue, outFrameData[0][i]);
-            maxValue = Math.max(maxValue, outFrameData[1][i]);
-        }
-        
-        for (int i = 0; i < outFrameData[0].length; i++)
-        {
-            outFrameData[0][i] = outFrameData[0][i] / maxValue;
-            outFrameData[1][i] = outFrameData[1][i] / maxValue;
-        }
-        
-        
-        
-        output.putFrames(0, outFrameData);
-        
+        // create sample and write frames to it
+        Sample output = new Sample(lengthMS);
+        output.putFrames(0, normalize(outFrameData)); 
         
         return output;
     }
     
-   
+       
     
+    private static float[][] normalize(float[][] frameData)
+    {
+        
+        float maxValue = 0;
+        for (int i = 0; i < frameData[0].length; i++)
+        {
+            // get max value
+            maxValue = Math.max(maxValue, frameData[0][i]);
+            maxValue = Math.max(maxValue, frameData[1][i]);
+        }
+        
+        for (int i = 0; i < frameData[0].length; i++)
+        {
+            frameData[0][i] = frameData[0][i] / maxValue;
+            frameData[1][i] = frameData[1][i] / maxValue;
+        }
+
+        return frameData;
+    }
 }
