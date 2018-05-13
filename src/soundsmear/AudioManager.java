@@ -25,12 +25,16 @@ public class AudioManager {
     private Sample outputSample;
     private SamplePlayer outputPlayer;
     
+    private SoundSmearUI ui;
+    
     JFileChooser fc;
     
-    public AudioManager()
+    public AudioManager(SoundSmearUI ui)
     {
         ac = new AudioContext();
         ac.start();
+        
+        this.ui = ui;
         
         fc = new JFileChooser();
         
@@ -43,7 +47,7 @@ public class AudioManager {
         }
         catch (IOException e)
         {
-            System.out.println("Error loading default wavs.");    
+            ui.logText("Error loading default wavs.");    
         }
     }
     
@@ -59,20 +63,20 @@ public class AudioManager {
                 
                 inputPlayer[index] = setupPlayer(new SamplePlayer(ac, inputSample[index]));
                 
-                System.out.println(sampleFile.getName() + " loaded.");
+                ui.logText(sampleFile.getName() + " loaded.");
                 
                 return sampleFile.getName();
             }
             catch (IOException e)
             {
-                System.out.println(e);
-                System.out.println("Unable to load " + sampleFile.getName());
+                //ui.logText(e);
+                ui.logText("Unable to load " + sampleFile.getName());
                 return "";
             }
         }
         else 
         {
-            System.out.println("User cancelled selection. No file loaded.");
+            ui.logText("User cancelled selection. No file loaded.");
             return "";
         }  
     }
@@ -85,10 +89,11 @@ public class AudioManager {
             try
             {
                 outputSample.write(fc.getSelectedFile().getAbsolutePath());
+                ui.logText("File saved.");
             }
             catch (IOException e)
             {
-                System.out.println("Failed to save file.");
+                ui.logText("Failed to save file.");
             }
         }
         
@@ -136,11 +141,13 @@ public class AudioManager {
     
     public void processInput()
     {
-        outputSample = SmearingProcess.processFrames(this);
-        
         if (outputPlayer != null) {  outputPlayer.pause(true);  }
         
+        outputSample = SmearingProcess.processFrames(this);
+               
         outputPlayer = setupPlayer(new SamplePlayer(ac, outputSample));
+        
+        ui.logText("Processing complete.");
     }
     
     

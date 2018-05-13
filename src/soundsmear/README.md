@@ -2,17 +2,12 @@
  
 TO DO:
 
--!! CLICK IN SOME SOUNDS WHEN LOOPING: OFF BY ONE SOMEWHERE WHEN WORKING WITH FRAMES?
-
--!! doesn't work correctly if input files aren't 44.1khz, etc
-
-
--need(?) to use interpolation for frame values for better sound when changing pitch
-
--use better panning law, not linear
-
--need to clean up audiomanager and smearprocess!
-
--add in-window display of messages currently printed to console
-
--eventually remove beads and do wav reading/writing/playing myself?
+-write descriptive readme
+-fix up UI
+-implement loading/processing of non-44.1khz files
+-use interpolation when changing pitch/rate so it sounds better?
+-use better panning law for random panning (currently linear)
+-some more code cleanup/refactoring/readability stuff to make it easy to reuse for other sound tools
+-take care of any remaining issues with loading/playing/stopping/processing sounds at the wrong time
+-maybe eventually remove beads and do my own wav reading/writing/playing???
+-!! STILL CLICK IN PURER SOUNDS WHEN LOOPING, BUT CAN'T FIGURE IT OUT

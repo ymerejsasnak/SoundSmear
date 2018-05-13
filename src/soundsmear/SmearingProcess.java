@@ -86,25 +86,23 @@ public class SmearingProcess {
             if (r.nextBoolean())
             {
                 inData = inFrameDataA;
-                rate = r.nextFloat() * (pitchRange0/1 - 1/pitchRange0) + 1/pitchRange0;
+                rate = r.nextFloat() * (pitchRange0 / 1 - 1 / pitchRange0) + 1 / pitchRange0;
             }
             else
             {
                 inData = inFrameDataB;
-                rate = r.nextFloat() * (pitchRange1/1 - 1/pitchRange1) + 1/pitchRange1;
+                rate = r.nextFloat() * (pitchRange1 / 1 - 1 / pitchRange1) + 1 / pitchRange1;
             }
             
             
             
-            // position to start working from
-            int offset = r.nextInt(outFrameData[0].length);
-           
-            int writeFrame = 0;
+            // set position to start working from
+            int writeFrame = r.nextInt(outFrameData[0].length);
             
-            for (float frame = 0; frame < inData[0].length; frame += rate)
+            for (float readFrame = 0; readFrame < inData[0].length; readFrame += rate)
             {                   
-                outFrameData[0][(writeFrame + offset) % outFrameData[0].length] += inData[0][(int)frame] * leftGain;
-                outFrameData[1][(writeFrame + offset) % outFrameData[0].length] += inData[1][(int)frame] * rightGain;
+                outFrameData[0][writeFrame % outFrameData[0].length] += inData[0][(int)readFrame] * leftGain;
+                outFrameData[1][writeFrame % outFrameData[0].length] += inData[1][(int)readFrame] * rightGain;
                 writeFrame++;
             }
         }
